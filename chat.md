@@ -1,5 +1,5 @@
 Used AI Tool: ChatGPT(POE)
-Role: Brainstorm idea and provide additional ideas to the project. 
+Role: Provide detailed ideas and adjust grammer errors, detection of coding ideas.
 #Chat Log
 ##User##: What is the potential uniqueness and innovation of making one mental related app.
 ##AI##: 
@@ -70,4 +70,4 @@ The project evolution:
 - Providing other development directions from the response of AI, inclduing develop the app that could operate on wearables like Smart Watch 
 
 The Hosted Landing Page of our Website using HTML: https://htmlpreview.github.io/?https://github.com/DeathShura/MoodLab/blob/main/moodlab.html
-The Hosted Landing Page of out Website using   
+
