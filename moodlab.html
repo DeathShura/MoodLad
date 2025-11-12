@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MoodLab — Private • Evidence-based • Personalized</title>
+  <link rel="stylesheet" href="moodlab.css" />
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div class="title">
+          <div class="name">MoodLab</div>
+          <div class="tagline">Private • Evidence-based • Personalized</div>
+        </div>
+      </div>
+      <nav id="tabs" aria-label="Primary">
+        <button data-tab="journal" class="active">Smart Journal</button>
+        <button data-tab="coach">Personalized Activities</button>
+        <button data-tab="chat">Chat Bot</button>
+        <button data-tab="progress">Journey Tracker</button>
+        <button data-tab="community">Support Circles</button>
+        <button data-tab="biometrics">Biometric Integration</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Smart Journal -->
+    <section id="journal" class="grid" aria-labelledby="journalTitle">
+      <div class="card">
+        <div class="section-title">
+          <h2 id="journalTitle">Smart Journal</h2>
+          <span class="badge">Real-time Sentiment + Distortion Detection</span>
+        </div>
+        <textarea id="journalInput" placeholder="How are you feeling today? Write freely about your day, thoughts, and feelings..." aria-label="Journal input"></textarea>
+        <div class="row right" style="margin-top:10px">
+          <button class="btn outline" id="clearJournal">Clear</button>
+          <button class="btn" id="saveJournal">Save Entry</button>
+        </div>
+
+        <div class="divider"></div>
+        <div class="row-wrap" aria-live="polite">
+          <div class="pill">Sentiment: <b id="sentimentLabel">Neutral</b></div>
+          <div class="pill">Intensity: <b id="sentimentScore">0.00</b></div>
+          <div class="pill">Top Emotion: <b id="emotionLabel">Calm</b></div>
+        </div>
+
+        <div class="chips" id="distortions" style="margin-top:8px" aria-label="Detected cognitive distortions"></div>
+
+        <div class="suggestion" id="interventionSuggestion">
+          Start typing to get tailored micro-activities.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Recent Entries</h2>
+        <div id="entries" class="list"></div>
+      </div>
+    </section>
+
+    <!-- Personalized Activities -->
+    <section id="coach" class="grid hidden" aria-labelledby="coachTitle">
+      <div class="card">
+        <div class="section-title">
+          <h2 id="coachTitle">Personalized 3–5 min Activities</h2>
+          <span class="badge">Context-aware</span>
+        </div>
+        <div class="muted small">Choose a focus or let MoodLab auto-select from your latest journal.</div>
+        <div class="row" style="margin-top:8px">
+          <select id="focusSelect" aria-label="Choose focus">
+            <option value="auto">Auto (from mood/context)</option>
+            <option value="anxiety">Anxiety</option>
+            <option value="self-criticism">Self-criticism</option>
+            <option value="positive">Feeling great</option>
+            <option value="sleep">Sleep wind-down</option>
+            <option value="rumination">Rumination</option>
+          </select>
+          <button class="btn" id="generatePlan">Generate Plan</button>
+        </div>
+        <div id="plan" class="list" style="margin-top:8px"></div>
+      </div>
+
+      <div class="card">
+        <h2>Quick Tools</h2>
+        <div class="list">
+          <div class="item">
+            <b>Box Breathing (4-4-4-4)</b>
+            <div class="muted small">Tap start and follow the pace ring.</div>
+            <div class="center" style="padding:8px 0">
+              <canvas id="breathCanvas" width="260" height="160" aria-label="Breathing visual"></canvas>
+            </div>
+            <div class="row right">
+              <button class="btn good" id="startBreath">Start</button>
+              <button class="btn outline" id="stopBreath">Stop</button>
+            </div>
+          </div>
+          <div class="item">
+            <b>Self-Compassion Pause</b>
+            <div class="muted small">3 steps: Mindfulness, Common Humanity, Kindness. 2 minutes.</div>
+            <div class="row right">
+              <button class="btn" id="startSCP">Guide Me</button>
+            </div>
+            <div id="scpGuide" class="suggestion hidden"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chat Bot -->
+    <section id="chat" class="grid hidden" aria-labelledby="chatTitle">
+      <div class="card">
+        <div class="section-title">
+          <h2 id="chatTitle">MoodLab Chat</h2>
+          <span class="badge">Non-judgmental • Reflective</span>
+        </div>
+        <div id="chatWindow" class="chat" role="log" aria-live="polite"></div>
+        <div class="row" style="margin-top:8px">
+          <input id="chatInput" placeholder="Share what's on your mind..." aria-label="Chat message" />
+          <button class="btn" id="sendChat">Send</button>
+        </div>
+        <div class="footnote">Demo only. For clinical use: add safety triage and human-in-the-loop.</div>
+      </div>
+
+      <div class="card">
+        <h2>Guided Emotion Deconstruction</h2>
+        <div class="list">
+          <div class="item">
+            <b>Worry Deconstruction</b>
+            <div class="muted small">Separate solvable from hypothetical worries.</div>
+            <button class="btn outline small" id="worryGuide">Start</button>
+            <div id="worryPanel" class="suggestion hidden"></div>
+          </div>
+          <div class="item">
+            <b>Thought Record (CBT)</b>
+            <div class="muted small">Trigger → Thoughts → Feelings → Evidence → Balanced thought.</div>
+            <button class="btn outline small" id="thoughtRecord">Start</button>
+            <div id="trPanel" class="suggestion hidden"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Journey Tracker -->
+    <section id="progress" class="grid hidden" aria-labelledby="progressTitle">
+      <div class="card">
+        <div class="section-title">
+          <h2 id="progressTitle">Mood Trends</h2>
+        </div>
+        <canvas id="moodChart" width="600" height="180"></canvas>
+        <div class="footnote">Tracks sentiment score from journal entries. You can export below.</div>
+        <div class="row right" style="margin-top:8px">
+          <button class="btn outline" id="exportData">Export JSON</button>
+          <button class="btn outline" id="clearData">Reset Data</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Skill Trees & Milestones</h2>
+        <div class="list" id="skills"></div>
+      </div>
+    </section>
+
+    <!-- Community -->
+    <section id="community" class="grid hidden" aria-labelledby="communityTitle">
+      <div class="card">
+        <div class="section-title">
+          <h2 id="communityTitle">Support Circles</h2>
+          <span class="badge">Opt-in • Anonymous • Not a public feed</span>
+        </div>
+        <div class="toggle">
+          <input type="checkbox" id="optIn" />
+          <label for="optIn">Join anonymous circles</label>
+        </div>
+        <div id="circlePanel" class="hidden">
+          <div class="divider"></div>
+          <div class="muted small">Pick a circle. Your display name is anonymized locally.</div>
+          <div class="row" style="margin-top:8px">
+            <select id="circleSelect" aria-label="Select circle">
+              <option value="anxiety">Anxiety Coping</option>
+              <option value="self-compassion">Self-Compassion Practice</option>
+              <option value="sleep">Better Sleep</option>
+              <option value="gratitude">Gratitude Boosters</option>
+            </select>
+            <input id="anonName" placeholder="Anon name (e.g., SkyFox)" aria-label="Anonymous display name" />
+            <button class="btn" id="joinCircle">Join</button>
+          </div>
+          <div id="circleRoom" class="hidden">
+            <div class="divider"></div>
+            <div class="muted small">Circle messages live on your device in this demo.</div>
+            <div id="circleChat" class="chat"></div>
+            <div class="row" style="margin-top:8px">
+              <input id="circleInput" placeholder="Share a tip or check-in..." aria-label="Circle message" />
+              <button class="btn" id="sendCircle">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Guidelines</h2>
+        <ul class="muted small">
+          <li>Be kind. No diagnosis or treatment claims.</li>
+          <li>No personal info. Anonymous by design.</li>
+          <li>Seek immediate help in emergencies.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Biometrics -->
+    <section id="biometrics" class="grid hidden" aria-labelledby="bioTitle">
+      <div class="card">
+        <div class="section-title">
+          <h2 id="bioTitle">Biometric Integration</h2>
+          <span class="badge">Demo: HR, HRV, Temp, BP</span>
+        </div>
+        <div class="muted small">Simulated data + optional Web Bluetooth placeholder. Correlates physiology with journal mood.</div>
+        <div class="row">
+          <button class="btn" id="simulateBio">Simulate Session</button>
+          <button class="btn outline" id="stopBio">Stop</button>
+          <button class="btn warn" id="connectBLE">Try Web Bluetooth</button>
+        </div>
+        <div class="list" style="margin-top:10px">
+          <div class="item">
+            <div class="row" style="align-items:center;justify-content:space-between">
+              <div class="skill"><div class="circle"></div><b>Heart Rate</b></div>
+              <div class="pill"><span id="hrVal">--</span> bpm</div>
+            </div>
+            <div class="progress"><span id="hrBar"></span></div>
+          </div>
+          <div class="item">
+            <div class="row" style="align-items:center;justify-content:space-between">
+              <div class="skill"><div class="circle"></div><b>HRV</b></div>
+              <div class="pill"><span id="hrvVal">--</span> ms</div>
+            </div>
+            <div class="progress"><span id="hrvBar"></span></div>
+          </div>
+          <div class="item">
+            <div class="row" style="align-items:center;justify-content:space-between">
+              <div class="skill"><div class="circle"></div><b>Temp</b></div>
+              <div class="pill"><span id="tempVal">--</span> °C</div>
+            </div>
+            <div class="progress"><span id="tempBar"></span></div>
+          </div>
+          <div class="item">
+            <div class="row" style="align-items:center;justify-content:space-between">
+              <div class="skill"><div class="circle"></div><b>Blood Pressure</b></div>
+              <div class="pill"><span id="bpVal">--</span> mmHg</div>
+            </div>
+            <div class="progress"><span id="bpBar"></span></div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <canvas id="bioChart" width="600" height="180"></canvas>
+        <div class="footnote">Correlates HRV (higher is generally better) with mood score.</div>
+      </div>
+
+      <div class="card">
+        <h2>Privacy & Safety</h2>
+        <ul class="muted small">
+          <li>All demo data stays in your browser localStorage.</li>
+          <li>No data leaves your device.</li>
+          <li>For production: encryption, key management, opt-in cloud backup, and clinical safety nets.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <script src="moodlab.js"></script>
+</body>
+</html>
